@@ -15,7 +15,7 @@ const Home = () => {
   }, []);
 
   const handleLogout = () => {
-    fetch('https://oryx-credible-buzzard.ngrok-free.app/api/auth/logout', {
+    fetch('http://202.10.40.143:3000/api/auth/logout', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
