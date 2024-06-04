@@ -17,42 +17,33 @@ const Login = () => {
     };
 
     const handleSignIn = async () => {
-        try {
-            const response = await fetch('https://oryx-credible-buzzard.ngrok-free.app/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+        const response = await fetch('https://oryx-credible-buzzard.ngrok-free.app/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
 
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('access_token', data.data.access_token);
-                localStorage.setItem('refresh_token', data.data.refresh_token);
-                localStorage.setItem('id', data.data.id);
-                localStorage.setItem('name', data.data.name);
-                localStorage.setItem('email', data.data.email);
-                localStorage.setItem('username', data.data.username);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Login Successful',
-                    text: 'Welcome!',
-                });
-                navigate("/home");
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Failed',
-                    text: 'Invalid username or password!',
-                });
-            }
-        } catch (error) {
-            console.error('Error during login:', error);
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('access_token', data.data.access_token);
+            localStorage.setItem('refresh_token', data.data.refresh_token);
+            localStorage.setItem('id', data.data.id);
+            localStorage.setItem('name', data.data.name);
+            localStorage.setItem('email', data.data.email);
+            localStorage.setItem('username', data.data.username);
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Successful',
+                text: 'Welcome!',
+            });
+            navigate("/home");
+        } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong! Please try again later.',
+                title: 'Login Failed',
+                text: 'Invalid username or password!',
             });
         }
     };
