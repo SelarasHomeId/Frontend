@@ -15,7 +15,7 @@ const Home = () => {
   }, []);
 
   const handleLogout = () => {
-    fetch('http://202.10.40.143:3000/api/auth/logout', {
+    fetch('https://202.10.40.143:3000/api/auth/logout', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`

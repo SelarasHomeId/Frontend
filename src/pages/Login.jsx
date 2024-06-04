@@ -18,7 +18,7 @@ const Login = () => {
 
     const handleSignIn = async () => {
         try {
-            const response = await fetch('http://202.10.40.143:3000/api/auth/login', {
+            const response = await fetch('https://202.10.40.143:3000/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
