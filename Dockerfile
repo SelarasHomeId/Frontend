@@ -14,7 +14,7 @@ RUN npm install --only=development
 COPY . .
 
 # Expose port yang digunakan oleh aplikasi (misalnya, 3000 untuk React + Vite)
-EXPOSE 3000
+EXPOSE 8000
 
 # Perintah untuk menjalankan aplikasi dalam mode pengembangan
 CMD ["npm", "run", "dev"]
