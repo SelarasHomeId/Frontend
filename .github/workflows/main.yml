@@ -40,5 +40,4 @@ jobs:
                 fi
                 
                 # Instal dependensi npm
-                npm install || { echo "npm install failed"; exit 1; }
-                npm run dev
+                npm install --only=prod || { echo "npm install failed"; exit 1; }
