@@ -35,8 +35,8 @@ jobs:
                 # Periksa dan instal npm jika belum terinstal
                 if ! command -v npm &> /dev/null; then
                     echo "npm not found, installing npm"
-                    curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash - || { echo "Failed to download NodeSource setup script"; exit 1; }
-                    sudo apt-get install -y nodejs npm || { echo "Failed to install nodejs"; exit 1; }
+                    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - || { echo "Failed to download NodeSource setup script"; exit 1; }
+                    sudo apt-get install -y nodejs || { echo "Failed to install nodejs"; exit 1; }
                 fi
                 
                 # Instal dependensi npm
