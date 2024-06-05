@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependensi npm untuk mode pengembangan
-RUN npm install --only=prod
+RUN npm install --only=development
 
 # Salin seluruh kode sumber aplikasi
 COPY . .
