@@ -46,7 +46,7 @@ const Home = () => {
 
   return (
     <div className="text-center mb-4 text-lg font-bold">
-        <h1>Hello!</h1>
+        <h1>Hello Admin!</h1>
         {userData && (
             <div>
                 <p>Username: {userData.username}</p>
