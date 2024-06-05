@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependensi npm untuk mode pengembangan
-RUN npm install --only=development
+RUN npm install --only=prod
 
 # Salin seluruh kode sumber aplikasi
 COPY . .
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Perintah untuk menjalankan aplikasi dalam mode pengembangan
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
