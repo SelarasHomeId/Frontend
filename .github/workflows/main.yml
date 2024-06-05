@@ -8,36 +8,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: yusnars/my-frontend-selarashomeid-image:latest
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN }}
+
       - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
-            host: ${{secrets.SERVER_HOST}}
-            username: ${{secrets.SERVER_USERNAME}}
-            password: ${{secrets.SERVER_PASSWORD}}
-            port: ${{secrets.SERVER_PORT}}
+            host: ${{ secrets.SERVER_HOST }}
+            username: ${{ secrets.SERVER_USERNAME }}
+            password: ${{ secrets.SERVER_PASSWORD }}
+            port: ${{ secrets.SERVER_PORT }}
             script: |
-                # Masuk ke direktori target
-                cd /var/www/html/ || { echo "Failed to cd into /var/www/html/"; exit 1; }
-
-                # Pastikan direktori adalah repositori Git
-                if [ ! -d ".git" ]; then
-                    echo "Initializing new git repository"
-                    git init || { echo "Failed to initialize git repository"; exit 1; }
-                    git remote add origin https://github.com/SelarasHomeId/Frontend.git || { echo "Failed to add remote origin"; exit 1; }
-                fi
-                
-                # Pull dari repositori
-                git pull origin main || { echo "Failed to pull from origin"; exit 1; }
-                
-                # Periksa status git
-                git status || { echo "Failed to check git status"; exit 1; }
-                
-                # Periksa dan instal npm jika belum terinstal
-                if ! command -v npm &> /dev/null; then
-                    echo "npm not found, installing npm"
-                    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - || { echo "Failed to download NodeSource setup script"; exit 1; }
-                    sudo apt-get install -y nodejs || { echo "Failed to install nodejs"; exit 1; }
-                fi
-                
-                # Instal dependensi npm
-                npm install || { echo "npm install failed"; exit 1; }
+                docker stop my-frontend-selarashomeid-container || true
+                docker rm my-frontend-selarashomeid-container || true
+                docker rmi yusnars/my-frontend-selarashomeid-image:latest || true
+                docker run -d -p 8000:8000 --name my-frontend-selarashomeid-container yusnars/my-frontend-selarashomeid-image:latest
