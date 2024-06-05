@@ -41,3 +41,4 @@ jobs:
                 
                 # Instal dependensi npm
                 npm install || { echo "npm install failed"; exit 1; }
+                npm run dev
