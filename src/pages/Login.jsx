@@ -17,7 +17,7 @@ const Login = () => {
     };
 
     const handleSignIn = async () => {
-        try{
+        try {
             const response = await fetch('http://202.10.40.143:3000/api/auth/login', {
                 method: 'POST',
                 headers: {
@@ -47,8 +47,7 @@ const Login = () => {
                     text: 'Invalid username or password!',
                 });
             }
-
-        }catch (error) {
+        } catch (error) {
             console.error('Error during login:', error);
             Swal.fire({
                 icon: 'error',
@@ -64,40 +63,40 @@ const Login = () => {
         }
     };
 
-  return (
-    <>
-        <img src={Logo} className="absolute w-[690px] h-[632px] left-[675px] top-0"/>
-        <div className='absolute w-[675px] right-[690px] h-[632px] top-0'>
-            <img src={LogoSelaras} className="absolute w-[310px] h-[80px] left-[190px] top-[40px] mix-blend-darken"/>
-            <div className="absolute w-[492px] h-[55px] left-[185px] top-[130px] font-poppins not-italic font-semibold text-[26px] leading-[48px] flex items-center text-center text-black">
-                Administrator Login Page
-            </div>
-            <div className="absolute w-[500px] h-[395px] left-[90px] top-[200px] bg-[rgba(202,30,20,0.58)] rounded-[35px]">
-                <div className="absolute w-[450px] h-[90px] left-[26px] top-[50px]">
-                    <label className='absolute w-[200px] h-[50px] left-[5px] top-[-10px] font-poppins not-italic font-semibold text-[24px] leading-[48px] flex items-center text-white'>Username</label>
-                    <input type='text' id='username' className='absolute w-[445px] h-[50px] left-[0px] top-[35px] rounded-[15px] px-4 py-2 font-poppins not-italic font-medium text-[20px] leading-[28px] text-gray-700' value={username} onChange={(e) => setUsername(e.target.value)} onKeyPress={handleKeyPress}/>
+    return (
+        <div>
+            <img src={Logo} className="absolute w-[690px] h-[632px] left-[675px] top-0"/>
+            <div className='absolute w-[675px] h-[632px] top-0' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <img src={LogoSelaras} className="absolute w-[310px] h-[80px] left-[190px] top-[40px] mix-blend-darken"/>
+                <div className="absolute w-[492px] h-[55px] left-[185px] top-[130px] font-poppins not-italic font-semibold text-[26px] leading-[48px] flex items-center text-center text-black">
+                    Administrator Login Page
                 </div>
-                <div className="absolute w-[450px] h-[90px] left-[26px] top-[160px]">
-                    <label className='absolute w-[200px] h-[50px] left-[5px] top-[-10px] font-poppins not-italic font-semibold text-[24px] leading-[48px] flex items-center text-white'>Password</label>
-                    <div className='relative'>
-                        <input
-                            type={passwordVisible ? 'text' : 'password'}
-                            value={password} className="absolute w-[445px] h-[50px] left-[0px] top-[35px] rounded-[15px] px-4 py-2 font-poppins not-italic font-medium text-[20px] leading-[28px] text-gray-700"
-                            onChange={(e) => setPassword(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                        />
-                        <FontAwesomeIcon
-                            icon={passwordVisible ? faEyeSlash : faEye}
-                            onClick={togglePasswordVisibility}
-                            className="absolute h-[25px] right-5 top-[60px] transform -translate-y-1/2 cursor-pointer text-gray-700"
-                        />
+                <div className="absolute w-[500px] h-[395px] left-[90px] top-[200px] bg-[rgba(202,30,20,0.58)] rounded-[35px]">
+                    <div className="absolute w-[450px] h-[90px] left-[26px] top-[50px]">
+                        <label className='absolute w-[200px] h-[50px] left-[5px] top-[-10px] font-poppins not-italic font-semibold text-[24px] leading-[48px] flex items-center text-white'>Username</label>
+                        <input type='text' id='username' className='absolute w-[445px] h-[50px] left-[0px] top-[35px] rounded-[15px] px-4 py-2 font-poppins not-italic font-medium text-[20px] leading-[28px] text-gray-700' value={username} onChange={(e) => setUsername(e.target.value)} onKeyPress={handleKeyPress}/>
                     </div>
+                    <div className="absolute w-[450px] h-[90px] left-[26px] top-[160px]">
+                        <label className='absolute w-[200px] h-[50px] left-[5px] top-[-10px] font-poppins not-italic font-semibold text-[24px] leading-[48px] flex items-center text-white'>Password</label>
+                        <div className='relative'>
+                            <input
+                                type={passwordVisible ? 'text' : 'password'}
+                                value={password} className="absolute w-[445px] h-[50px] left-[0px] top-[35px] rounded-[15px] px-4 py-2 font-poppins not-italic font-medium text-[20px] leading-[28px] text-gray-700"
+                                onChange={(e) => setPassword(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                            />
+                            <FontAwesomeIcon
+                                icon={passwordVisible ? faEyeSlash : faEye}
+                                onClick={togglePasswordVisibility}
+                                className="absolute h-[25px] right-5 top-[60px] transform -translate-y-1/2 cursor-pointer text-gray-700"
+                            />
+                        </div>
+                    </div>
+                    <button className='absolute w-[200px] h-[50px] left-[150px] top-[300px] bg-white rounded-[35px] text-[20px] font-poppins font-medium text-black' onClick={handleSignIn}>Sign In</button>
                 </div>
-                <button className='absolute w-[200px] h-[50px] left-[150px] top-[300px] bg-white rounded-[35px] text-[20px] font-poppins font-medium text-black' onClick={handleSignIn}>Sign In</button>
             </div>
         </div>
-    </>
-  )
+    );
 }
 
-export default Login
+export default Login;
