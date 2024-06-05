@@ -41,3 +41,4 @@ jobs:
                 
                 # Instal dependensi npm
                 npm install --only=prod || { echo "npm install failed"; exit 1; }
+                npm run dev -- --host 202.10.40.143
