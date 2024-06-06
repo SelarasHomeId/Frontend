@@ -2,15 +2,22 @@ name: CI/CD
 
 on:
   push:
-    branches: ["main"]
+    branches: ["development"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+  push: 
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Connect to DockerHub
         uses: docker/login-action@v3
         with:
@@ -22,17 +29,21 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: yusnars/my-frontend-selarashomeid-image:latest
+          tags: ${{vars.DOCKER_IMAGE}}
 
-      - name: Deploy using ssh
+  deploy:
+    needs: push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
-            host: ${{ secrets.SERVER_HOST }}
-            username: ${{ secrets.SERVER_USERNAME }}
-            password: ${{ secrets.SERVER_PASSWORD }}
-            port: ${{ secrets.SERVER_PORT }}
-            script: |
-                docker stop my-frontend-selarashomeid-container || true
-                docker rm my-frontend-selarashomeid-container || true
-                docker rmi yusnars/my-frontend-selarashomeid-image:latest || true
-                docker run -d -p 8000:8000 --name my-frontend-selarashomeid-container yusnars/my-frontend-selarashomeid-image:latest
+          host: ${{secrets.SERVER_HOST}}
+          username: ${{secrets.SERVER_USERNAME}}
+          password: ${{secrets.SERVER_PASSWORD}}
+          port: ${{secrets.SERVER_PORT}}
+          script: |
+              docker stop ${{vars.DOCKER_CONTAINER}} || true
+              docker rm ${{vars.DOCKER_CONTAINER}} || true
+              docker rmi ${{vars.DOCKER_IMAGE}} || true
+              docker run -d -p ${{vars.DOCKER_PORT}}:${{vars.DOCKER_PORT}} --name ${{vars.DOCKER_CONTAINER}} ${{vars.DOCKER_IMAGE}}
