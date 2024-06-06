@@ -182,7 +182,7 @@ const Header = ({handleMenuClick}) => {
         <div className="absolute w-[1116px] left-[250px] h-[90px] top-0 bg-red-600 flex justify-end items-center px-4">
             <div className="relative" ref={dropdownRef}>
                 <div className="relative cursor-pointer" onClick={toggleDropdown}>
-                    <FontAwesomeIcon icon={faBell} className="text-white text-2xl animate-shake" />
+                    <FontAwesomeIcon icon={faBell} className={ unreadCount == 0 ? "text-white text-2xl" : "text-white text-2xl animate-shake"} />
                     {unreadCount > 0 && (
                         <span className="absolute bottom-4 left-3 h-5 w-5 bg-blue-500 rounded-full ring-2 ring-white text-xs text-white flex items-center justify-center">
                             {unreadCount}
@@ -220,7 +220,7 @@ const Header = ({handleMenuClick}) => {
                     Hello, {localStorage.getItem("name")}! 
                 </div>
                 {adminDropdownOpen && (
-                    <div className="absolute left-4 mt-2 w-[210px] bg-white border border-gray-200 rounded-lg shadow-lg">
+                    <div className="absolute left-4 mt-2 w-[285px] bg-white border border-gray-200 rounded-lg shadow-lg">
                         <ul className="py-1">
                             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => handleMenuClick("ChangePassword")}>Change Password</li>
                             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={handleLogout}>Logout</li>
