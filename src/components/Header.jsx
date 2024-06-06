@@ -4,8 +4,9 @@ import { faBell, faEnvelopeOpen, faEnvelope } from '@fortawesome/free-solid-svg-
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import PropTypes from 'prop-types';
 
-const Header = () => {
+const Header = ({handleMenuClick}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [adminDropdownOpen, setAdminDropdownOpen] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -87,27 +88,27 @@ const Header = () => {
         });
     };
 
-    const handleClickNotification = (id) => {
-        fetch(`http://202.10.40.143:3000/api/notification/set-read/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-            }
-        })
-        .then(response => {
-        if (response.ok) {
-            console.error('Success set read');
-        } else {
-            console.error('Error set read');
-        }
-        })
-        .catch(error => {
+    const handleClickNotification = async (id) => {
+        try {
+            await axios.patch(`http://202.10.40.143:3000/api/notification/set-read/${id}`, null, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            });
+            const responseCount = await axios.get('http://202.10.40.143:3000/api/notification/count-unread',{
+                    headers:{
+                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                    }
+            });
+            setUnreadCount(responseCount.data.data.count_unread);
+            setDropdownOpen(false);
+        } catch (error) {
             console.error('Error during set read:', error);
-        });
+        }
     };
 
     return (
-        <div className="absolute w-[1366px] h-[70px] top-0 bg-red-600 flex justify-end items-center px-4">
+        <div className="absolute w-[1116px] left-[250px] h-[90px] top-0 bg-red-600 flex justify-end items-center px-4">
             <div className="relative" ref={dropdownRef}>
                 <div className="relative cursor-pointer" onClick={toggleDropdown}>
                     <FontAwesomeIcon icon={faBell} className="text-white text-2xl animate-shake" />
@@ -144,13 +145,13 @@ const Header = () => {
                 )}
             </div>
             <div className="relative ml-4">
-                <div className="relative text-white py-2 px-4 rounded-lg">
+                <div className="relative text-white py-2 px-4 rounded-lg text-lg font-bold">
                     Hello, {localStorage.getItem("name")}! 
                 </div>
                 {adminDropdownOpen && (
                     <div className="absolute left-4 mt-2 w-[210px] bg-white border border-gray-200 rounded-lg shadow-lg">
                         <ul className="py-1">
-                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Change Password</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => handleMenuClick("ChangePassword")}>Change Password</li>
                             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={handleLogout}>Logout</li>
                         </ul>
                     </div>
@@ -161,6 +162,10 @@ const Header = () => {
             </div>
         </div>
     );
+};
+
+Header.propTypes = {
+    handleMenuClick: PropTypes.func.isRequired,
 };
 
 export default Header;
