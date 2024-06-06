@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import BgLogin from '../assets/bg-login.png'
 import LogoSelaras from '../assets/logo-selaras.png'
+import { apiRequest } from '../services/api';
 
 const Login = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -17,45 +18,44 @@ const Login = () => {
     };
 
     const handleSignIn = async () => {
-        try {
-            const response = await fetch('http://202.10.40.143:3000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
+        apiRequest('post', '/api/auth/login', {
+            username:username,
+            password:password
+        },{
+            "Content-Type": "application/json",
+        })
+        .then(response => {
+            const data = response.data
+            localStorage.setItem('access_token', data.data.access_token);
+            localStorage.setItem('refresh_token', data.data.refresh_token);
+            localStorage.setItem('id', data.data.id);
+            localStorage.setItem('name', data.data.name);
+            localStorage.setItem('email', data.data.email);
+            localStorage.setItem('username', data.data.username);
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Successful',
+                text: 'Welcome!',
             });
-    
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('access_token', data.data.access_token);
-                localStorage.setItem('refresh_token', data.data.refresh_token);
-                localStorage.setItem('id', data.data.id);
-                localStorage.setItem('name', data.data.name);
-                localStorage.setItem('email', data.data.email);
-                localStorage.setItem('username', data.data.username);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Login Successful',
-                    text: 'Welcome!',
-                });
-                navigate("/home");
-            } else {
-                console.log(response.meta.message)
+            navigate("/home");
+        })
+        .catch(error => {
+            if (error.response.status!==422){
+                console.log(error.response.data)
                 Swal.fire({
                     icon: 'error',
                     title: 'Login Failed',
                     text: 'Invalid username or password!',
                 });
+            }else{
+                console.error('Error during login:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Please try again later.',
+                });
             }
-        } catch (error) {
-            console.error('Error during login:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong! Please try again later.',
-            });
-        }
+        });
     };
 
     const handleKeyPress = (event) => {

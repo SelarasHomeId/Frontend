@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faEnvelopeOpen, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import PropTypes from 'prop-types';
+import { apiRequest,handleToken } from '../services/api';
 
 const Header = ({handleMenuClick}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -42,36 +42,58 @@ const Header = ({handleMenuClick}) => {
 
     useEffect(() => {
         const fetchNotifications = async () => {
-            try {
-                const responseCount = await axios.get('http://202.10.40.143:3000/api/notification/count-unread',{
-                    headers:{
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    }
-                });
-                const responseData = await axios.get('http://202.10.40.143:3000/api/notification',{
-                    headers:{
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    }
-                });
-                setUnreadCount(responseCount.data.data.count_unread);
-                setNotifications(responseData.data.data)
-            } catch (error) {
-                console.error('Error fetching notifications:', error);
-            }
+
+            apiRequest('get', '/api/notification/count-unread',null,{
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            })
+            .then(response => {
+                const data = response.data
+                setUnreadCount(data.data.count_unread);
+            })
+            .catch(error => {
+                if (error.response.status!==401){
+                    handleToken();
+                    fetchNotifications();
+                }else if (error.response.status!==422){
+                    console.log(error.response.data)
+                }else{
+                    console.error('Error during get count unread:', error);    
+                }
+            });
+
+            apiRequest('get', '/api/notification',null,{
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            })
+            .then(response => {
+                const data = response.data
+                setNotifications(data.data);
+            })
+            .catch(error => {
+                if (error.response.status!==401){
+                    handleToken();
+                    fetchNotifications();
+                }else if (error.response.status!==422){
+                    console.log(error.response.data)
+                }else{
+                    console.error('Error during get notifications:', error);    
+                }
+            });
+
         };
 
         fetchNotifications();
     }, []);
 
     const handleLogout = () => {
-        fetch('http://202.10.40.143:3000/api/auth/logout', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-            }
+
+        apiRequest('post', '/api/auth/logout',null,{
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         })
         .then(response => {
-        if (response.ok) {
+            console.log(response.data)
             localStorage.clear();
             Swal.fire({
                 icon: 'success',
@@ -79,32 +101,81 @@ const Header = ({handleMenuClick}) => {
                 text: 'Good Bye!',
             });
             navigate("/");
-        } else {
-            console.error('Failed logout');
-        }
         })
         .catch(error => {
-            console.error('Error during logout:', error);
+            if (error.response.status!==401){
+                handleToken();
+                handleLogout();
+            }else if (error.response.status!==422){
+                console.log(error.response.data)
+            }else{
+                console.error('Error during logout:', error);    
+            }
         });
+
     };
 
     const handleClickNotification = async (id) => {
-        try {
-            await axios.patch(`http://202.10.40.143:3000/api/notification/set-read/${id}`, null, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+
+        apiRequest('patch', `/api/notification/set-read/${id}`,null,{
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        })
+        .then(response => {
+            console.log(response.data)
+
+            apiRequest('get', '/api/notification/count-unread',null,{
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            })
+            .then(response => {
+                const data = response.data
+                setUnreadCount(data.data.count_unread);
+
+                apiRequest('get', '/api/notification',null,{
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                })
+                .then(response => {
+                    const data = response.data
+                    setNotifications(data.data);
+                })
+                .catch(error => {
+                    if (error.response.status!==401){
+                        handleToken();
+                        handleClickNotification();
+                    }else if (error.response.status!==422){
+                        console.log(error.response.data)
+                    }else{
+                        console.error('Error during get notifications:', error);    
+                    }
+                });
+
+            })
+            .catch(error => {
+                if (error.response.status!==401){
+                    handleToken();
+                    handleClickNotification();
+                }else if (error.response.status!==422){
+                    console.log(error.response.data)
+                }else{
+                    console.error('Error during get count unread:', error);    
                 }
             });
-            const responseCount = await axios.get('http://202.10.40.143:3000/api/notification/count-unread',{
-                    headers:{
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    }
-            });
-            setUnreadCount(responseCount.data.data.count_unread);
-            setDropdownOpen(false);
-        } catch (error) {
-            console.error('Error during set read:', error);
-        }
+
+        })
+        .catch(error => {
+            if (error.response.status!==401){
+                handleToken();
+                handleClickNotification();
+            }else if (error.response.status!==422){
+                console.log(error.response.data)
+            }else{
+                console.error('Error during get count unread:', error);    
+            }
+        });
+        
+        setDropdownOpen(false);
     };
 
     return (
