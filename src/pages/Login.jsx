@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import Logo from '../assets/bg-login.png'
-import LogoSelaras from '../assets/logo-selaras.png'
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import BgLogin from '../assets/bg-login.png'
+import LogoSelaras from '../assets/logo-selaras.png'
 
 const Login = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -41,6 +41,7 @@ const Login = () => {
                 });
                 navigate("/home");
             } else {
+                console.log(response.meta.message)
                 Swal.fire({
                     icon: 'error',
                     title: 'Login Failed',
@@ -65,7 +66,7 @@ const Login = () => {
 
     return (
         <div>
-            <img src={Logo} className="absolute w-[690px] h-[632px] left-[675px] top-0"/>
+            <img src={BgLogin} className="absolute w-[690px] h-[632px] left-[675px] top-0"/>
             <div className='absolute w-[675px] h-[632px] top-0' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <img src={LogoSelaras} className="absolute w-[310px] h-[80px] left-[190px] top-[40px] mix-blend-darken"/>
                 <div className="absolute w-[492px] h-[55px] left-[185px] top-[130px] font-poppins not-italic font-semibold text-[26px] leading-[48px] flex items-center text-center text-black">
