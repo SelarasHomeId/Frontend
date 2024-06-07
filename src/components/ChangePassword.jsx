@@ -1,7 +1,11 @@
+import BgFeature from '../assets/bg-feature.png'
+
 const ChangePassword = () => {
-  return (
-    <div className="flex justify-center items-center h-full w-full text-black text-lg">Change Password</div>
-  )
+    return (
+        <div>
+            <img src={BgFeature} className="absolute w-[1116px] h-[250px] bg-gradient-to-b from-black-opacity-35 to-black-opacity-35" />
+        </div>
+    )
 }
 
 export default ChangePassword
