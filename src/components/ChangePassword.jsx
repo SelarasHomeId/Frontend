@@ -85,9 +85,9 @@ const ChangePassword = () => {
     return (
         <div>
             <img src={BgFeature} className="absolute w-[1116px] h-[250px] bg-gradient-to-b from-black-opacity-35 to-black-opacity-35" />
-            <div className="absolute left-[80px] top-[25px] w-[664px] h-[52px] font-poppins font-bold text-[18px] leading-[36px] flex items-center text-white"><pre>{"Dashboard  >  Change Password"}</pre></div>
-            <div className="absolute left-[80px] top-[77px] w-[523px] h-[67px] font-poppins font-bold text-[32px] leading-[60px] flex items-center text-white">CHANGE PASSWORD</div>
-            <div className="absolute left-[80px] top-[160px] w-[960px] h-[330px] bg-white border border-black rounded-[25px] box-border">
+            <div className="absolute left-[80px] top-[10px] w-[664px] h-[52px] font-poppins font-bold text-[18px] leading-[36px] flex items-center text-white"><pre>{'Dashboard  >  Change Password'}</pre></div>
+            <div className="absolute left-[80px] top-[60px] w-[523px] h-[67px] font-poppins font-bold text-[32px] leading-[60px] flex items-center text-white">CHANGE PASSWORD</div>
+            <div className="absolute left-[80px] top-[140px] w-[960px] h-[330px] bg-white border border-black rounded-[25px] box-border">
                 <div className='absolute left-7 top-1.5 w-[361px] h-[42px] font-poppins text-[30px] font-bold leading-[54px] flex items-center text-black'>Change Password</div>
                 <div className="absolute left-0 top-[50px] w-full h-0 border-t border-black"/>
                 <div className="absolute left-10 top-[70px] w-[887px] h-[50px]">
