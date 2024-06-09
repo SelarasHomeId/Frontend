@@ -15,7 +15,7 @@ const apiRequest = async (method, url, data, headers) => {
         const response = await axios(config);
         return response;
     } catch (error) {
-        if (error.response && error.response.status === 401) {
+        if (url!='/api/auth/login' && error.response && error.response.status === 401) {
             console.error(`Error with ${method.toUpperCase()} request to ${url}: Unauthorized (401). Redirecting to login.`);
             localStorage.clear()
             Swal.fire({
