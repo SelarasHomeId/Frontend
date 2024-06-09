@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import PropTypes from 'prop-types';
 import { apiRequest } from '../services/useApi';
+import notifSound from '../assets/notif_sound.ogg'
 
 const Header = ({handleMenuClick}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -14,6 +15,7 @@ const Header = ({handleMenuClick}) => {
     const dropdownRef = useRef(null);
     const adminDropdownRef = useRef(null);
     const navigate = useNavigate();
+    const audioRef = useRef(new Audio(notifSound));
     
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
@@ -50,6 +52,15 @@ const Header = ({handleMenuClick}) => {
             .then(response => {
                 const data = response.data
                 setUnreadCount(data.data.count_unread);
+
+                if (data.data.count_unread > 0) {
+                    document.title = `(${data.data.count_unread}) Hello Admin!`;
+                    if (audioRef.current) {
+                        audioRef.current.play();
+                    }
+                } else {
+                    document.title = 'Hello Admin!';
+                }
             })
             .catch(error => {
                 console.error('Error during get count unread:', error);    
@@ -126,6 +137,12 @@ const Header = ({handleMenuClick}) => {
             .then(response => {
                 const data = response.data
                 setUnreadCount(data.data.count_unread);
+
+                if (data.data.count_unread > 0) {
+                    document.title = `(${data.data.count_unread}) Hello Admin!`;
+                } else {
+                    document.title = 'Hello Admin!';
+                }
 
                 apiRequest('get', '/api/notification',null,{
                     "Content-Type": "application/json",

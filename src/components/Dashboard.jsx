@@ -35,7 +35,7 @@ const Dashboard = () => {
                     ],
                 });
                 setChartDataForm({
-                    labels: [ 'Contact', 'Affiliate'],
+                    labels: ['Contact', 'Affiliate'],
                     datasets: [
                         {
                             label: 'Submit Counts',
@@ -70,7 +70,7 @@ const Dashboard = () => {
             legend: {
                 labels: {
                     font: {
-                        size: 16 
+                        size: 11
                     },
                     color: 'gray'
                 }
@@ -82,18 +82,18 @@ const Dashboard = () => {
         <div>
             <h2 className="text-center text-xl font-bold mt-4"><span className='text-blue-500 hover:cursor-pointer hover:underline'><a href='https://selarashome.id/' target='_blank'>SelarasHome.Id</a></span> Access Report</h2>
             <h2 className="text-center text-xl font-bold mt-2">Period: {currentMonthYear}</h2>
-            <div className="mt-10 flex justify-center space-x-10">
+            <div className="mt-8 flex justify-center space-x-10">
                 {loading ? (
                 <p>Loading chart...</p>
                 ) : (
-                <>
-                    <div style={{ width: '35%', height: 'auto' }}>
-                        <Pie data={chartDataSosmed} options={options}/>
-                    </div>
-                    <div style={{ width: '35%', height: 'auto' }}>
-                        <Pie data={chartDataForm} options={options}/>
-                    </div>
-                </>
+                    <>
+                        <div style={{ width: '37%', height: 'auto' }}>
+                            <Pie data={chartDataSosmed} options={options}/>
+                        </div>
+                        <div style={{ width: '37%', height: 'auto' }}>
+                            <Pie data={chartDataForm} options={options}/>
+                        </div>
+                    </>
                 )}
             </div>
         </div>
