@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import BgLogin from '../assets/bg-login.png'
 import LogoSelaras from '../assets/logo-selaras.png'
-import { apiRequest } from '../services/api';
+import { apiRequest } from '../services/useApi';
 
 const Login = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -18,7 +18,7 @@ const Login = () => {
     };
 
     const handleSignIn = async () => {
-        apiRequest('post', '/api/auth/login', {
+        await apiRequest('post', '/api/auth/login', {
             username:username,
             password:password
         },{
@@ -26,8 +26,7 @@ const Login = () => {
         })
         .then(response => {
             const data = response.data
-            localStorage.setItem('access_token', data.data.access_token);
-            localStorage.setItem('refresh_token', data.data.refresh_token);
+            localStorage.setItem('token', data.data.token);
             localStorage.setItem('id', data.data.id);
             localStorage.setItem('name', data.data.name);
             localStorage.setItem('email', data.data.email);
@@ -49,11 +48,6 @@ const Login = () => {
                 });
             }else{
                 console.error('Error during login:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong! Please try again later.',
-                });
             }
         });
     };
@@ -75,7 +69,7 @@ const Login = () => {
                 <div className="absolute w-[500px] h-[395px] left-[90px] top-[200px] bg-[rgba(202,30,20,0.58)] rounded-[35px]">
                     <div className="absolute w-[450px] h-[90px] left-[26px] top-[50px]">
                         <label className='absolute w-[200px] h-[50px] left-[5px] top-[-10px] font-poppins not-italic font-semibold text-[24px] leading-[48px] flex items-center text-white'>Username</label>
-                        <input type='text' id='username' className='absolute w-[445px] h-[50px] left-[0px] top-[35px] rounded-[15px] px-4 py-2 font-poppins not-italic font-medium text-[20px] leading-[28px] text-gray-700' value={username} onChange={(e) => setUsername(e.target.value)} onKeyPress={handleKeyPress}/>
+                        <input type='text' placeholder='Input Username' id='username' className='absolute w-[445px] h-[50px] left-[0px] top-[35px] rounded-[15px] px-4 py-2 font-poppins not-italic font-medium text-[20px] leading-[28px] text-gray-700' value={username} onChange={(e) => setUsername(e.target.value)} onKeyPress={handleKeyPress}/>
                     </div>
                     <div className="absolute w-[450px] h-[90px] left-[26px] top-[160px]">
                         <label className='absolute w-[200px] h-[50px] left-[5px] top-[-10px] font-poppins not-italic font-semibold text-[24px] leading-[48px] flex items-center text-white'>Password</label>
@@ -85,6 +79,7 @@ const Login = () => {
                                 value={password} className="absolute w-[445px] h-[50px] left-[0px] top-[35px] rounded-[15px] px-4 py-2 font-poppins not-italic font-medium text-[20px] leading-[28px] text-gray-700"
                                 onChange={(e) => setPassword(e.target.value)}
                                 onKeyPress={handleKeyPress}
+                                placeholder='Input Password'
                             />
                             <FontAwesomeIcon
                                 icon={passwordVisible ? faEyeSlash : faEye}

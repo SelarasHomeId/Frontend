@@ -4,7 +4,7 @@ import { faBell, faEnvelopeOpen, faEnvelope } from '@fortawesome/free-solid-svg-
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import PropTypes from 'prop-types';
-import { apiRequest,handleToken } from '../services/api';
+import { apiRequest } from '../services/useApi';
 
 const Header = ({handleMenuClick}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -45,40 +45,36 @@ const Header = ({handleMenuClick}) => {
 
             apiRequest('get', '/api/notification/count-unread',null,{
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
             })
             .then(response => {
                 const data = response.data
                 setUnreadCount(data.data.count_unread);
             })
             .catch(error => {
-                if (error.response.status!==401){
-                    handleToken();
-                    fetchNotifications();
-                }else if (error.response.status!==422){
-                    console.log(error.response.data)
-                }else{
-                    console.error('Error during get count unread:', error);    
-                }
+                console.error('Error during get count unread:', error);    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Fetch count unread notification error',
+                    text: error.response.data,
+                });
             });
 
             apiRequest('get', '/api/notification',null,{
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
             })
             .then(response => {
                 const data = response.data
                 setNotifications(data.data);
             })
             .catch(error => {
-                if (error.response.status!==401){
-                    handleToken();
-                    fetchNotifications();
-                }else if (error.response.status!==422){
-                    console.log(error.response.data)
-                }else{
-                    console.error('Error during get notifications:', error);    
-                }
+                console.error('Error during fetch notification:', error);    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Fetch notification error',
+                    text: error.response.data,
+                });
             });
 
         };
@@ -90,7 +86,7 @@ const Header = ({handleMenuClick}) => {
 
         apiRequest('post', '/api/auth/logout',null,{
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         })
         .then(response => {
             console.log(response.data)
@@ -103,14 +99,12 @@ const Header = ({handleMenuClick}) => {
             navigate("/");
         })
         .catch(error => {
-            if (error.response.status!==401){
-                handleToken();
-                handleLogout();
-            }else if (error.response.status!==422){
-                console.log(error.response.data)
-            }else{
-                console.error('Error during logout:', error);    
-            }
+            console.error('Error during logout:', error);    
+            Swal.fire({
+                icon: 'error',
+                title: 'Logout error',
+                text: error.response.data,
+            });
         });
 
     };
@@ -119,14 +113,14 @@ const Header = ({handleMenuClick}) => {
 
         apiRequest('patch', `/api/notification/set-read/${id}`,null,{
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         })
         .then(response => {
             console.log(response.data)
 
             apiRequest('get', '/api/notification/count-unread',null,{
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
             })
             .then(response => {
                 const data = response.data
@@ -134,45 +128,39 @@ const Header = ({handleMenuClick}) => {
 
                 apiRequest('get', '/api/notification',null,{
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 })
                 .then(response => {
                     const data = response.data
                     setNotifications(data.data);
                 })
                 .catch(error => {
-                    if (error.response.status!==401){
-                        handleToken();
-                        handleClickNotification();
-                    }else if (error.response.status!==422){
-                        console.log(error.response.data)
-                    }else{
-                        console.error('Error during get notifications:', error);    
-                    }
+                    console.error('Error during fetch notification:', error);    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fetch notification error',
+                        text: error.response.data,
+                    });
                 });
 
             })
             .catch(error => {
-                if (error.response.status!==401){
-                    handleToken();
-                    handleClickNotification();
-                }else if (error.response.status!==422){
-                    console.log(error.response.data)
-                }else{
-                    console.error('Error during get count unread:', error);    
-                }
+                console.error('Error during get count unread:', error);    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Fetch count unread notification error',
+                    text: error.response.data,
+                });
             });
 
         })
         .catch(error => {
-            if (error.response.status!==401){
-                handleToken();
-                handleClickNotification();
-            }else if (error.response.status!==422){
-                console.log(error.response.data)
-            }else{
-                console.error('Error during get count unread:', error);    
-            }
+            console.error('Error during set-read:', error);    
+            Swal.fire({
+                icon: 'error',
+                title: 'Set read notification error',
+                text: error.response.data,
+            });
         });
         
         setDropdownOpen(false);
