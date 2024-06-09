@@ -17,8 +17,8 @@ const Login = () => {
         setPasswordVisible(!passwordVisible);
     };
 
-    const handleSignIn = async () => {
-        await apiRequest('post', '/api/auth/login', {
+    const handleSignIn = () => {
+        apiRequest('post', '/api/auth/login', {
             username:username,
             password:password
         },{
