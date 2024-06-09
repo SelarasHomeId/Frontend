@@ -100,9 +100,10 @@ const Header = ({handleMenuClick}) => {
         })
         .catch(error => {
             console.error('Error during logout:', error);    
+            navigate("/");
             Swal.fire({
                 icon: 'error',
-                title: 'Logout error',
+                title: 'Logout error, please re-login',
                 text: error.response.data.meta.message,
             });
         });

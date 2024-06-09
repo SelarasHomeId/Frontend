@@ -11,23 +11,22 @@ const apiRequest = async (method, url, data, headers) => {
             data: data,
             headers: headers
         };
-
         const response = await axios(config);
         return response;
     } catch (error) {
-        if (url!='/api/auth/login' && error.response && error.response.status === 401) {
+        if (url != '/api/auth/login' && headers.Authorization != undefined && error.response && error.response.status === 401) {
             console.error(`Error with ${method.toUpperCase()} request to ${url}: Unauthorized (401). Redirecting to login.`);
             localStorage.clear()
-            Swal.fire({
-                icon: 'success',
-                title: 'Logout Successful',
-                text: 'Good Bye!',
-            });
             window.location.href = '/';
+            Swal.fire({
+                icon: 'info',
+                title: 'Your session has expired',
+                text: 'Please re-login...',
+            });
         } else {
             console.error(`Error with ${method.toUpperCase()} request to ${url}:`, error.message);
+            throw error;
         }
-        throw error;
     }
 };
 
