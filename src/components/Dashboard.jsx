@@ -80,7 +80,7 @@ const Dashboard = () => {
 
     return (
         <div>
-            <h2 className="text-center text-xl font-bold mt-4">Social Media Access Report</h2>
+            <h2 className="text-center text-xl font-bold mt-4"><span className='text-blue-500 hover:cursor-pointer hover:underline'><a href='https://selarashome.id/' target='_blank'>SelarasHome.Id</a></span> Access Report</h2>
             <h2 className="text-center text-xl font-bold mt-2">Period: {currentMonthYear}</h2>
             <div className="mt-10 flex justify-center space-x-10">
                 {loading ? (
