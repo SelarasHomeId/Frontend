@@ -56,7 +56,7 @@ const Header = ({handleMenuClick}) => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Fetch count unread notification error',
-                    text: error.response.data,
+                    text: error.response.data.meta.message,
                 });
             });
 
@@ -73,7 +73,7 @@ const Header = ({handleMenuClick}) => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Fetch notification error',
-                    text: error.response.data,
+                    text: error.response.data.meta.message,
                 });
             });
 
@@ -89,7 +89,7 @@ const Header = ({handleMenuClick}) => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         })
         .then(response => {
-            console.log(response.data)
+            console.log(response.data.meta)
             localStorage.clear();
             Swal.fire({
                 icon: 'success',
@@ -103,7 +103,7 @@ const Header = ({handleMenuClick}) => {
             Swal.fire({
                 icon: 'error',
                 title: 'Logout error',
-                text: error.response.data,
+                text: error.response.data.meta.message,
             });
         });
 
@@ -139,7 +139,7 @@ const Header = ({handleMenuClick}) => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Fetch notification error',
-                        text: error.response.data,
+                        text: error.response.data.meta.message,
                     });
                 });
 
@@ -149,7 +149,7 @@ const Header = ({handleMenuClick}) => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Fetch count unread notification error',
-                    text: error.response.data,
+                    text: error.response.data.meta.message,
                 });
             });
 
@@ -159,11 +159,47 @@ const Header = ({handleMenuClick}) => {
             Swal.fire({
                 icon: 'error',
                 title: 'Set read notification error',
-                text: error.response.data,
+                text: error.response.data.meta.message,
             });
         });
         
         setDropdownOpen(false);
+    };
+
+    const handleResetPassword = (id) => {
+
+        Swal.fire({
+            icon: "warning",
+            title: "Password will be reset, confirm action?",
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                apiRequest('post', `/api/auth/reset-password/${id}`,null,{
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                })
+                .then(response => {
+                    console.log(response.data)
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Successfully reset the password!',
+                        text: response.data.data.message,
+                    });
+                })
+                .catch(error => {
+                    console.error('Error during reset password:', error);    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Reset password failed',
+                        text: error.response.data.meta.message,
+                    });
+                });
+
+            }
+        });
+
     };
 
     return (
@@ -211,6 +247,7 @@ const Header = ({handleMenuClick}) => {
                     <div className="absolute left-4 mt-2 w-[285px] bg-white border border-gray-200 rounded-lg shadow-lg">
                         <ul className="py-1">
                             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => handleMenuClick("ChangePassword")}>Change Password</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => handleResetPassword(localStorage.getItem("id"))}>Reset Password</li>
                             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={handleLogout}>Logout</li>
                         </ul>
                     </div>

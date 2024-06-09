@@ -40,7 +40,7 @@ const Login = () => {
         })
         .catch(error => {
             if (error.response.status!==422){
-                console.log(error.response.data)
+                console.log(error.response.data.meta.message)
                 Swal.fire({
                     icon: 'error',
                     title: 'Login Failed',

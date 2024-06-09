@@ -2,6 +2,8 @@ import BgFeature from '../assets/bg-feature.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import Swal from 'sweetalert2'
+import { apiRequest } from '../services/useApi';
 
 const ChangePassword = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -20,6 +22,65 @@ const ChangePassword = () => {
     const toggleConfirmPasswordVisibility = () => {
         setConfirmPasswordVisible(!confirmPasswordVisible);
     };
+
+    const handleChangePassword = (id) => {
+        if (password==""||newPassword==""||confirmPassword==""){
+            Swal.fire({
+                icon: 'info',
+                title: 'There are still empty fields',
+            });
+            return;
+        }else if (newPassword==password){
+            Swal.fire({
+                icon: 'info',
+                title: 'The new password cannot be the same as the old password',
+            });
+            return;
+        }else if (newPassword!=confirmPassword){
+            Swal.fire({
+                icon: 'info',
+                title: 'Please confirm the new password',
+            });
+            return;
+        }else{
+            Swal.fire({
+                icon: "warning",
+                title: "Password will be changed, confirm action?",
+                showCancelButton: true,
+                confirmButtonText: "Confirm",
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    apiRequest('post', `/api/auth/change-password/${id}`,{
+                        old_password:password,
+                        new_password:newPassword
+                    },{
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    })
+                    .then(response => {
+                        console.log(response.data)
+                        Swal.fire("Successfully changed the password!", "", "success");
+                        setPassword("")
+                        setNewPassword("")
+                        setConfirmPassword("")
+                        setPasswordVisible(false)
+                        setNewPasswordVisible(false)
+                        setConfirmPasswordVisible(false)
+                    })
+                    .catch(error => {
+                        console.error('Error during change password:', error);    
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Change password failed',
+                            text: error.response.data.meta.message,
+                        });
+                    });
+
+                }
+            });
+        }
+    }
 
     return (
         <div>
@@ -56,7 +117,7 @@ const ChangePassword = () => {
                         className="absolute h-[25px] right-2 top-[23px] transform -translate-y-1/2 cursor-pointer text-gray-700"
                     />
                 </div>
-                <button className='absolute left-[775px] top-[260px] w-[150px] h-[40px] bg-[#159F1B] rounded-[35px] text-[25px] font-poppins font-medium text-white'>Save</button>
+                <button className='absolute left-[775px] top-[260px] w-[150px] h-[40px] bg-[#159F1B] rounded-[35px] text-[25px] font-poppins font-medium text-white' onClick={() => handleChangePassword(localStorage.getItem("id"))}>Save</button>
             </div>
         </div>
     )
