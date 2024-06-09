@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEye, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { apiRequest } from '../services/useApi';
 import Swal from 'sweetalert2'
+import * as XLSX from 'xlsx';
 
 const Customer = () => {
     const [keyword, setKeyword] = useState('');
@@ -51,6 +52,27 @@ const Customer = () => {
         setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
     };
 
+    const handleExportData = () => {
+        const modifiedContacts = contacts.map(contact => ({
+            ...contact,
+            created_at: contact.created_at.replace(/[TZ]/g, ' ')
+        }));
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(modifiedContacts);
+        XLSX.utils.book_append_sheet(wb, ws, 'Data Contact Customer');
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const currentDate = `${year}-${month}-${day}`;
+
+        const exportFileName = `ExportData-Contact-Customer_${currentDate}`;
+
+        XLSX.writeFile(wb, `${exportFileName}.xlsx`);
+    };
+
     return (
         <div>
             <img src={BgFeature} className="absolute w-[1116px] h-[250px] bg-gradient-to-b from-black-opacity-35 to-black-opacity-35" />
@@ -61,7 +83,7 @@ const Customer = () => {
                 <div className="absolute left-[318.5px] top-[10px] w-[40px] h-[40px] flex items-center justify-center text-white bg-blue-500 rounded-[15px]">
                     <FontAwesomeIcon icon={faSearch} />
                 </div>
-                <button className='absolute right-[10px] top-[10px] w-[160px] h-[40px] bg-[#159F1B] rounded-[35px] text-[20px] font-poppins font-medium text-white'>
+                <button className='absolute right-[10px] top-[10px] w-[160px] h-[40px] bg-[#159F1B] rounded-[35px] text-[20px] font-poppins font-medium text-white' onClick={handleExportData}>
                     {"Export Data"}
                     <FontAwesomeIcon icon={faDownload} className='h-[20px] ml-2' />
                 </button>
