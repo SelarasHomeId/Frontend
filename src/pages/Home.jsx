@@ -37,6 +37,10 @@ const Home = () => {
         }
     }
 
+    const handleOnCloseDetail = (module) => {
+        setSelectedMenu(module)
+    }
+
     useEffect(()=>{
         setSelectedMenu("Dashboard")
     },[]);
@@ -50,8 +54,8 @@ const Home = () => {
                 {selectedMenu === "Customer" && <Customer onViewDetail={handleViewDetailContact} />}
                 {selectedMenu === "Affiliate" && <Affiliate onViewDetail={handleViewDetailAffiliate} />}
                 {selectedMenu === "ChangePassword" && <ChangePassword />}
-                {selectedMenu === "CustomerDetail" && <CustomerDetail contactId={selectedContactId} />}
-                {selectedMenu === "AffiliateDetail" && <AffiliateDetail affiliateId={selectedAffiliateId} />}
+                {selectedMenu === "CustomerDetail" && <CustomerDetail contactId={selectedContactId} onCloseDetail={handleOnCloseDetail} />}
+                {selectedMenu === "AffiliateDetail" && <AffiliateDetail affiliateId={selectedAffiliateId} onCloseDetail={handleOnCloseDetail} />}
             </div>
             <Header handleMenuClick={handleMenuClick} onViewNotificationDetail={handleViewNotificationDetail} />
         </>

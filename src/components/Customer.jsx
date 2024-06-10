@@ -102,7 +102,7 @@ const Customer = ({onViewDetail}) => {
             <div className="absolute left-[80px] top-[60px] w-[523px] h-[67px] font-poppins font-bold text-[32px] leading-[60px] flex items-center text-white">CUSTOMER CARE (Messaging)</div>
             <div className="absolute left-[15px] top-[140px] w-[1088px] h-[390px] bg-white border border-black rounded-[25px] box-border">
                 <input onChange={(e) => setKeyword(e.target.value)} value={keyword} type='text' placeholder='Search' className="absolute left-[10px] top-[10px] w-[350px] h-[40px] border border-black box-border rounded-[15px] px-4 py-2 font-poppins not-italic font-medium text-[20px] leading-[28px] text-gray-700"/>
-                <div className="absolute left-[318.5px] top-[10px] w-[40px] h-[40px] flex items-center justify-center text-white rounded-[15px]">
+                <div className="absolute left-[318.5px] top-[10px] w-[40px] h-[40px] flex items-center justify-center text-black rounded-[15px]">
                     <FontAwesomeIcon icon={faSearch} />
                 </div>
                 <button className='absolute right-[10px] top-[10px] w-[160px] h-[40px] bg-[#159F1B] rounded-[35px] text-[20px] font-poppins font-medium text-white' onClick={handleExportData}>
