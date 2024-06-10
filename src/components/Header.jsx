@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { apiRequest } from '../services/useApi';
 import notifSound from '../assets/notif_sound.ogg'
 
-const Header = ({handleMenuClick}) => {
+const Header = ({handleMenuClick,onViewNotificationDetail}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [adminDropdownOpen, setAdminDropdownOpen] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -151,6 +151,29 @@ const Header = ({handleMenuClick}) => {
                 .then(response => {
                     const data = response.data
                     setNotifications(data.data);
+
+                    apiRequest('get', `/api/notification/${id}`,null,{
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    })
+                    .then(response => {
+                        const data = response.data
+
+                        const module = data.data.module
+                        const dataId = data.data.data_id
+
+                        onViewNotificationDetail(module,dataId);
+                        
+                    })
+                    .catch(error => {
+                        console.error('Error during get detail notification:', error);    
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Get Detail Notification failed',
+                            text: error.response.data.meta.message,
+                        });
+                    });
+
                 })
                 .catch(error => {
                     console.error('Error during fetch notification:', error);    
@@ -280,6 +303,7 @@ const Header = ({handleMenuClick}) => {
 
 Header.propTypes = {
     handleMenuClick: PropTypes.func.isRequired,
+    onViewNotificationDetail: PropTypes.func.isRequired
 };
 
 export default Header;

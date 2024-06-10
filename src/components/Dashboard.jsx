@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { apiRequest } from '../services/useApi';
+import LoadingSpinnerDashboard from './LoadingSpinnerDashboard';
 
 const Dashboard = () => {
     const [chartDataSosmed, setChartDataSosmed] = useState({});
@@ -24,9 +25,9 @@ const Dashboard = () => {
                         {
                             label: 'Access Counts',
                             data: [
-                                data.count_facebook,
                                 data.count_instagram,
                                 data.count_tiktok,
+                                data.count_facebook,
                                 data.count_whatsapp
                             ],
                             backgroundColor: [ '#FF9F40', '#4BC0C0', '#FFCE56', '#9966FF'],
@@ -40,8 +41,8 @@ const Dashboard = () => {
                         {
                             label: 'Submit Counts',
                             data: [
-                                data.count_affiliate,
                                 data.count_contact,
+                                data.count_affiliate,
                             ],
                             backgroundColor: ['#36A2EB', '#FF6384'],
                             hoverBackgroundColor: ['#36A2EB', '#FF6384'],
@@ -84,7 +85,7 @@ const Dashboard = () => {
             <h2 className="text-center text-xl font-bold mt-2">Period: {currentMonthYear}</h2>
             <div className="mt-8 flex justify-center space-x-10">
                 {loading ? (
-                <p>Loading chart...</p>
+                    <LoadingSpinnerDashboard/>
                 ) : (
                     <>
                         <div style={{ width: '37%', height: 'auto' }}>
