@@ -146,21 +146,71 @@ const CustomerDetail = ({ contactId,onCloseDetail }) => {
     }
 
     const handleCopyPhone = () => {
-        navigator.clipboard.writeText(contact.phone).then(() => {
-            setCopyMessagePhone('Copied!');
-            setTimeout(() => {
-                setCopyMessagePhone('');
-            }, 2000);
-        });
+        const textArea = document.createElement("textarea");
+        textArea.value = contact.phone;
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = "2em";
+        textArea.style.height = "2em";
+        textArea.style.padding = 0;
+        textArea.style.border = "none";
+        textArea.style.outline = "none";
+        textArea.style.boxShadow = "none";
+        textArea.style.background = "transparent";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                setCopyMessagePhone('Copied!');
+                setTimeout(() => {
+                    setCopyMessagePhone('');
+                }, 2000);
+            } else {
+                console.error('Failed to copy text.');
+            }
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
     }
 
     const handleCopyEmail = () => {
-        navigator.clipboard.writeText(contact.email).then(() => {
-            setCopyMessageEmail('Copied!');
-            setTimeout(() => {
-                setCopyMessageEmail('');
-            }, 2000);
-        });
+        const textArea = document.createElement("textarea");
+        textArea.value = contact.email;
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = "2em";
+        textArea.style.height = "2em";
+        textArea.style.padding = 0;
+        textArea.style.border = "none";
+        textArea.style.outline = "none";
+        textArea.style.boxShadow = "none";
+        textArea.style.background = "transparent";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                setCopyMessageEmail('Copied!');
+                setTimeout(() => {
+                    setCopyMessageEmail('');
+                }, 2000);
+            } else {
+                console.error('Failed to copy text.');
+            }
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
     }
 
     if (!contact) {

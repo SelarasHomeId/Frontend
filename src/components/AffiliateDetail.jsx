@@ -148,39 +148,139 @@ const AffiliateDetail = ({ affiliateId,onCloseDetail }) => {
     }
 
     const handleCopyPhone = () => {
-        navigator.clipboard.writeText(affiliate.phone).then(() => {
-            setCopyMessagePhone('Copied!');
-            setTimeout(() => {
-                setCopyMessagePhone('');
-            }, 2000);
-        });
+        const textArea = document.createElement("textarea");
+        textArea.value = affiliate.phone;
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = "2em";
+        textArea.style.height = "2em";
+        textArea.style.padding = 0;
+        textArea.style.border = "none";
+        textArea.style.outline = "none";
+        textArea.style.boxShadow = "none";
+        textArea.style.background = "transparent";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                setCopyMessagePhone('Copied!');
+                setTimeout(() => {
+                    setCopyMessagePhone('');
+                }, 2000);
+            } else {
+                console.error('Failed to copy text.');
+            }
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
     }
 
     const handleCopyEmail = () => {
-        navigator.clipboard.writeText(affiliate.email).then(() => {
-            setCopyMessageEmail('Copied!');
-            setTimeout(() => {
-                setCopyMessageEmail('');
-            }, 2000);
-        });
+        const textArea = document.createElement("textarea");
+        textArea.value = affiliate.email;
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = "2em";
+        textArea.style.height = "2em";
+        textArea.style.padding = 0;
+        textArea.style.border = "none";
+        textArea.style.outline = "none";
+        textArea.style.boxShadow = "none";
+        textArea.style.background = "transparent";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                setCopyMessageEmail('Copied!');
+                setTimeout(() => {
+                    setCopyMessageEmail('');
+                }, 2000);
+            } else {
+                console.error('Failed to copy text.');
+            }
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
     }
 
     const handleCopyInstagram = () => {
-        navigator.clipboard.writeText(affiliate.instagram).then(() => {
-            setCopyMessageInstagram('Copied!');
-            setTimeout(() => {
-                setCopyMessageInstagram('');
-            }, 2000);
-        });
+        const textArea = document.createElement("textarea");
+        textArea.value = affiliate.instagram;
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = "2em";
+        textArea.style.height = "2em";
+        textArea.style.padding = 0;
+        textArea.style.border = "none";
+        textArea.style.outline = "none";
+        textArea.style.boxShadow = "none";
+        textArea.style.background = "transparent";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                setCopyMessageInstagram('Copied!');
+                setTimeout(() => {
+                    setCopyMessageInstagram('');
+                }, 2000);
+            } else {
+                console.error('Failed to copy text.');
+            }
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
     }
 
     const handleCopyTiktok = () => {
-        navigator.clipboard.writeText(affiliate.tiktok).then(() => {
-            setCopyMessageTikTok('Copied!');
-            setTimeout(() => {
-                setCopyMessageTikTok('');
-            }, 2000);
-        });
+        const textArea = document.createElement("textarea");
+        textArea.value = affiliate.tiktok;
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = "2em";
+        textArea.style.height = "2em";
+        textArea.style.padding = 0;
+        textArea.style.border = "none";
+        textArea.style.outline = "none";
+        textArea.style.boxShadow = "none";
+        textArea.style.background = "transparent";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                setCopyMessageTikTok('Copied!');
+                setTimeout(() => {
+                    setCopyMessageTikTok('');
+                }, 2000);
+            } else {
+                console.error('Failed to copy text.');
+            }
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
     }
 
     if (!affiliate) {
