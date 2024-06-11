@@ -4,7 +4,9 @@ import { apiRequest } from '../services/useApi';
 import Swal from 'sweetalert2';
 import PropTypes from 'prop-types';
 import LoadingSpinner from './LoadingSpinner';
-import { FaCopy } from 'react-icons/fa';
+import withReactContent from 'sweetalert2-react-content'
+import { SiGmail } from "react-icons/si";
+import { FaCopy,FaWhatsapp } from 'react-icons/fa';
 
 const AffiliateDetail = ({ affiliateId,onCloseDetail }) => {
     const [affiliate, setAffiliate] = useState(null);
@@ -12,6 +14,7 @@ const AffiliateDetail = ({ affiliateId,onCloseDetail }) => {
     const [copyMessageEmail, setCopyMessageEmail] = useState('');
     const [copyMessageInstagram, setCopyMessageInstagram] = useState('');
     const [copyMessageTikTok, setCopyMessageTikTok] = useState('');
+    const MySwal = withReactContent(Swal)
 
     useEffect(() => {
         const fetchAffiliateDetail = async () => {
@@ -74,10 +77,73 @@ const AffiliateDetail = ({ affiliateId,onCloseDetail }) => {
 
     }
 
+    const formatPhoneNumber = (number) => {
+        let cleanNumber = number.replace(/[^0-9+]/g, '');
+        if (cleanNumber.startsWith('0')) {
+            cleanNumber = '+62' + cleanNumber.substring(1);
+        }
+        if (!cleanNumber.startsWith('+')) {
+            cleanNumber = '+62' + cleanNumber;
+        }
+        cleanNumber = cleanNumber.replace(/\+/g, '');
+        return cleanNumber;
+    }
+
+    const createWhatsAppLink = (number) => {
+        const formattedNumber = formatPhoneNumber(number);
+        return `https://wa.me/${formattedNumber}`;
+    }
+
+    const validateAndFormatEmail = (email) => {
+        email = email.trim();
+        email = email.toLowerCase();
+        email = email.replace(/\s+/g, '');
+        const commonDomains = {
+            'gmal.com': 'gmail.com',
+            'gmai.com': 'gmail.com',
+            'gmial.com': 'gmail.com',
+            'gnail.com': 'gmail.com',
+            'hotmial.com': 'hotmail.com',
+            'hotmai.com': 'hotmail.com',
+            'yahho.com': 'yahoo.com',
+            'yaho.com': 'yahoo.com',
+        };
+        const parts = email.split('@');
+        if (parts.length === 2) {
+            const domain = parts[1];
+            if (commonDomains[domain]) {
+                email = parts[0] + '@' + commonDomains[domain];
+            }
+        }
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(email)) {
+            throw new Error("Alamat email tidak valid");
+        }
+        return email;
+    }
+    
+    const createMailtoLink = (email) => {
+        const formattedEmail = validateAndFormatEmail(email);
+        return `mailto:${formattedEmail}`;
+    }
+
     const handleClickReply = () => {
-        Swal.fire({
-            icon: 'info',
-            title: 'This feature on progress',
+        MySwal.fire({
+            title: 'Do you want to reply with?',
+            html: (
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <a href={createMailtoLink(affiliate.email)} target="_blank" style={{ color: '#DB4437' }}>
+                        <SiGmail size={60} style={{ margin: '0 30px' }} />
+                    </a>
+                    <a href={createWhatsAppLink(affiliate.phone)} target="_blank" style={{ color: '#25D366' }}>
+                        <FaWhatsapp size={60} style={{ margin: '0 30px' }} />
+                    </a>
+                </div>
+            ),
+            showConfirmButton: false,
+            customClass: {
+                container: 'rounded-lg'
+            }
         });
     }
 
