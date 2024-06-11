@@ -4,9 +4,12 @@ import { apiRequest } from '../services/useApi';
 import Swal from 'sweetalert2';
 import PropTypes from 'prop-types';
 import LoadingSpinner from './LoadingSpinner';
+import { FaCopy } from 'react-icons/fa';
 
 const CustomerDetail = ({ contactId,onCloseDetail }) => {
     const [contact, setContact] = useState(null);
+    const [copyMessagePhone, setCopyMessagePhone] = useState('');
+    const [copyMessageEmail, setCopyMessageEmail] = useState('');
 
     useEffect(() => {
         const fetchContactDetail = async () => {
@@ -76,6 +79,24 @@ const CustomerDetail = ({ contactId,onCloseDetail }) => {
         });
     }
 
+    const handleCopyPhone = () => {
+        navigator.clipboard.writeText(contact.phone).then(() => {
+            setCopyMessagePhone('Copied!');
+            setTimeout(() => {
+                setCopyMessagePhone('');
+            }, 2000);
+        });
+    }
+
+    const handleCopyEmail = () => {
+        navigator.clipboard.writeText(contact.email).then(() => {
+            setCopyMessageEmail('Copied!');
+            setTimeout(() => {
+                setCopyMessageEmail('');
+            }, 2000);
+        });
+    }
+
     if (!contact) {
         return <LoadingSpinner/>
     }
@@ -86,13 +107,21 @@ const CustomerDetail = ({ contactId,onCloseDetail }) => {
             <div className="absolute left-[80px] top-[10px] w-[664px] h-[52px] font-poppins font-bold text-[18px] leading-[36px] flex items-center text-white"><pre>{'Dashboard  >  Customer  >  Detail'}</pre></div>
             <div className="absolute left-[770px] top-[10px] w-[330px] h-[67px] font-poppins font-bold text-[32px] leading-[60px] text-white">DETAIL MESSAGING</div>
             <div className="absolute left-[15px] top-[80px] w-[1088px] h-[445px] bg-white border border-black rounded-[25px] box-border">
-                <div className="absolute left-[15px] top-[25px] w-[1055px] h-[30px] border-black font-poppins text-[18px] text-black leading-[30px] flex justify-between">
-                    <span>{`${contact.name} <${contact.email}>`}</span>
+                <div className="absolute left-[25px] top-[25px] w-[1035px] h-[30px] border-black font-poppins text-[18px] text-black leading-[30px] flex justify-between">
+                <span className='flex items-center'>
+                        {`${contact.name} <${contact.email}>`}
+                        <FaCopy onClick={handleCopyEmail} className="cursor-pointer ml-2" />
+                        {copyMessageEmail && <span className="text-green-500 ml-2">{copyMessageEmail}</span>}
+                    </span>
                     <span>{contact.created_at.replace(/[TZ]/g, ' ')}</span>
                 </div>
-                <div className="absolute left-[15px] top-[60px] w-[1055px] h-0 border-t border-black"/>
-                <div className="absolute left-[15px] top-[65px] w-[1055px] h-[30px] border-black font-poppins text-[18px] text-black leading-[30px] flex justify-between">
-                    <span>{contact.phone}</span>
+                <div className="absolute left-[25px] top-[60px] w-[1035px] h-0 border-t border-black"/>
+                <div className="absolute left-[25px] top-[65px] w-[1035px] h-[30px] border-black font-poppins text-[18px] text-black leading-[30px] flex justify-between">
+                    <span className='flex items-center'>
+                        {contact.phone}
+                        <FaCopy onClick={handleCopyPhone} className="cursor-pointer ml-2" />
+                        {copyMessagePhone && <span className="text-green-500 ml-2">{copyMessagePhone}</span>}
+                    </span>
                 </div>
                 <div className="absolute left-[15px] top-[100px] w-[1055px] h-[310px] bg-[#ececec] border border-black rounded-[25px] box-border">
                     <div className="absolute left-[20px] top-[18px] w-[1013px] h-[250px] overflow-auto font-poppins text-[18px] text-justify text-black leading-[30px]">
