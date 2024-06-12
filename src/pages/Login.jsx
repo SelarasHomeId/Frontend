@@ -44,7 +44,7 @@ const Login = () => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Login Failed',
-                    text: 'Invalid username or password!',
+                    text: error.response.data.meta.message,
                 });
             }else{
                 console.error('Error during login:', error);
