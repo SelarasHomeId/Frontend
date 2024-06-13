@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 import PropTypes from 'prop-types';
 import { apiRequest } from '../services/useApi';
 import notifSound from '../assets/notif_sound.ogg'
+import Cookies from 'js-cookie';
 
 const Header = ({handleMenuClick,onViewNotificationDetail}) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -107,6 +108,7 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
                 title: 'Logout Successful',
                 text: 'Good Bye!',
             });
+            Cookies.remove('token');
             navigate("/");
         })
         .catch(error => {

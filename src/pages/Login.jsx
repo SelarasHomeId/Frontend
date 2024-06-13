@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import BgLogin from '../assets/bg-login.png'
 import LogoSelaras from '../assets/logo-selaras.png'
 import { apiRequest } from '../services/useApi';
+import Cookies from 'js-cookie';
 
 const Login = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -36,6 +37,7 @@ const Login = () => {
                 title: 'Login Successful',
                 text: 'Welcome!',
             });
+            Cookies.set('token', data.data.token, { expires: 1 });
             navigate("/home");
         })
         .catch(error => {
@@ -57,6 +59,16 @@ const Login = () => {
             handleSignIn();
         }
     };
+
+    useEffect(() => {
+        const authToken = Cookies.get('token');
+        if (authToken){
+            console.log("Cookie available")
+            navigate("/home");
+        }else{
+            console.log("Cookie not available")
+        }
+    },[navigate])
 
     return (
         <div>

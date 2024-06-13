@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import Cookies from 'js-cookie';
 
 const BASE_URL = 'http://202.10.40.143:3000'
 
@@ -17,6 +18,7 @@ const apiRequest = async (method, url, data, headers) => {
         if (url != '/api/auth/login' && headers.Authorization != undefined && error.response && error.response.status === 401) {
             console.error(`Error with ${method.toUpperCase()} request to ${url}: Unauthorized (401). Redirecting to login.`);
             localStorage.clear()
+            Cookies.remove('token');
             window.location.href = '/';
             Swal.fire({
                 icon: 'info',
