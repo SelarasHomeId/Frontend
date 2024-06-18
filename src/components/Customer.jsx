@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 const Customer = ({onViewDetail}) => {
     const [keyword, setKeyword] = useState('');
     const [contacts, setContacts] = useState([]);
+    const [allContact, setAllContact] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const [hasNextPage, setHasNextPage] = useState(true);
@@ -26,8 +27,21 @@ const Customer = ({onViewDetail}) => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
             );
+
+            const responseAllContact = await apiRequest(
+                'get',
+                `/api/contact`,
+                null,
+                {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            );
+
             const data = response.data;
+            const dataAllContact = responseAllContact.data
             setContacts(data.data);
+            setAllContact(dataAllContact.data)
             setHasNextPage(data.meta.info.more_records);
             setHasPrevPage(currentPage > 1);
         } catch (error) {
@@ -65,7 +79,7 @@ const Customer = ({onViewDetail}) => {
             created_at: 'Date Submited'
         };
 
-        const modifiedContacts = contacts.map(contact => {
+        const modifiedContacts = allContact.map(contact => {
             const modifiedContact = {
                 ...contact,
                 created_at: contact.created_at.replace(/[TZ]/g, ' ')

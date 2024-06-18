@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 const Affiliate = ({onViewDetail}) => {
     const [keyword, setKeyword] = useState('');
     const [affiliates, setAffiliates] = useState([]);
+    const [allAffiliate, setAllAffiliate] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const [hasNextPage, setHasNextPage] = useState(true);
@@ -26,8 +27,21 @@ const Affiliate = ({onViewDetail}) => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
             );
+
+            const responseAllAffiliate = await apiRequest(
+                'get',
+                `/api/affiliate`,
+                null,
+                {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            );
+
             const data = response.data;
+            const dataAllAffiliate = responseAllAffiliate.data;
             setAffiliates(data.data);
+            setAllAffiliate(dataAllAffiliate.data);
             setHasNextPage(data.meta.info.more_records);
             setHasPrevPage(currentPage > 1);
         } catch (error) {
@@ -66,7 +80,7 @@ const Affiliate = ({onViewDetail}) => {
             created_at: 'Date Submited'
         };
 
-        const modifiedAffiliates = affiliates.map(contact => {
+        const modifiedAffiliates = allAffiliate.map(contact => {
             const modifiedContact = {
                 ...contact,
                 created_at: contact.created_at.replace(/[TZ]/g, ' ')

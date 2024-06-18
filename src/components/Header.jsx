@@ -57,12 +57,7 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
                 if (data.data.count_unread > 0) {
                     document.title = `(${data.data.count_unread}) Hello Admin!`;
                     if (audioRef.current) {
-                        audioRef.current.play().catch(error => {
-                            console.error('Audio play failed:', error);
-                            document.addEventListener('load', () => {
-                                audioRef.current.play();
-                            }, { once: true });
-                        });
+                        audioRef.current.play();
                     }
                 } else {
                     document.title = 'Hello Admin!';
