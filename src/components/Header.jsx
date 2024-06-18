@@ -56,7 +56,14 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
 
                 if (data.data.count_unread > 0) {
                     document.title = `(${data.data.count_unread}) Hello Admin!`;
-                    playAudio();
+                    if (audioRef.current) {
+                        audioRef.current.play().catch(error => {
+                            console.error('Audio play failed:', error);
+                            document.addEventListener('load', () => {
+                                audioRef.current.play();
+                            }, { once: true });
+                        });
+                    }
                 } else {
                     document.title = 'Hello Admin!';
                 }
@@ -91,17 +98,6 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
 
         fetchNotifications();
     }, []);
-
-    const playAudio = () => {
-        if (audioRef.current) {
-            audioRef.current.play().catch(error => {
-                console.error('Audio play failed:', error);
-                document.addEventListener('click', () => {
-                    audioRef.current.play();
-                }, { once: true });
-            });
-        }
-    };
 
     const handleLogout = () => {
 
