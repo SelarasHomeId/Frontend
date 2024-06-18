@@ -56,6 +56,7 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
 
                 if (data.data.count_unread > 0) {
                     document.title = `(${data.data.count_unread}) Hello Admin!`;
+                    playAudio();
                 } else {
                     document.title = 'Hello Admin!';
                 }
@@ -91,9 +92,19 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
         fetchNotifications();
     }, []);
 
-    const handleNotificationClick = () => {
-        if (unreadCount > 0) {
-            audioRef.current.play().catch(error => console.error('Error playing audio:', error));
+    const playAudio = () => {
+        if (audioRef.current) {
+            const playPromise = audioRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log(error)
+                    const enableAudio = () => {
+                        audioRef.current.play();
+                        document.removeEventListener('click', enableAudio);
+                    };
+                    document.addEventListener('click', enableAudio);
+                });
+            }
         }
     };
 
@@ -253,7 +264,7 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
     return (
         <div className="absolute w-[1116px] left-[250px] h-[90px] top-0 bg-red-600 flex justify-end items-center px-4">
             <div className="relative" ref={dropdownRef}>
-                <div className="relative cursor-pointer" onClick={() => {toggleDropdown(); handleNotificationClick();}}>
+                <div className="relative cursor-pointer" onClick={toggleDropdown}>
                     <FontAwesomeIcon icon={faBell} className={ unreadCount == 0 ? "text-white text-2xl" : "text-white text-2xl animate-shake"} />
                     {unreadCount > 0 && (
                         <span className="absolute bottom-4 left-3 h-5 w-5 bg-blue-500 rounded-full ring-2 ring-white text-xs text-white flex items-center justify-center">
