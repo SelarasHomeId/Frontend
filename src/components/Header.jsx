@@ -96,14 +96,11 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
         if (audioRef.current) {
             const playPromise = audioRef.current.play();
             if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log(error)
-                    const enableAudio = () => {
-                        audioRef.current.play();
-                        document.removeEventListener('click', enableAudio);
-                    };
-                    document.addEventListener('click', enableAudio);
-                });
+                const enableAudio = () => {
+                    audioRef.current.play();
+                    document.removeEventListener('click', enableAudio);
+                };
+                document.addEventListener('click', enableAudio);
             }
         }
     };
