@@ -103,16 +103,18 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
         .then(response => {
             console.log(response.data.meta)
             localStorage.clear();
+            Cookies.remove('token');
+            navigate("/");
             Swal.fire({
                 icon: 'success',
                 title: 'Logout Successful',
                 text: 'Good Bye!',
             });
-            Cookies.remove('token');
-            navigate("/");
         })
         .catch(error => {
             console.error('Error during logout:', error);    
+            localStorage.clear();
+            Cookies.remove('token');
             navigate("/");
             Swal.fire({
                 icon: 'error',
