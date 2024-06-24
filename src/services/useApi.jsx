@@ -20,6 +20,7 @@ const apiRequest = async (method, url, data, headers) => {
             localStorage.clear()
             Cookies.remove('token');
             window.location.href = '/';
+            document.title = 'Hello Admin!';
             Swal.fire({
                 icon: 'info',
                 title: 'Your session has expired',

@@ -241,7 +241,9 @@ const CustomerDetail = ({ contactId,onCloseDetail }) => {
                 </div>
                 <div className="absolute left-[15px] top-[100px] w-[1055px] h-[310px] bg-[#ececec] border border-black rounded-[25px] box-border">
                     <div className="absolute left-[20px] top-[18px] w-[1013px] h-[250px] overflow-auto font-poppins text-[18px] text-justify text-black leading-[30px]">
-                        {contact.message}
+                        {contact.message.replace(/<br \/>/g, '\n').split('\n').map((line, index) => (
+                            <div key={index}>{line}</div>
+                        ))}
                     </div>
                 </div>
                 <button className='absolute left-[35px] bottom-[15px] w-[130px] h-[40px] bg-[#ececec] rounded-[35px] text-[20px] font-poppins font-medium text-black border border-black box-border' onClick={() => onCloseDetail("Customer")}>Close</button>

@@ -105,6 +105,7 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
             localStorage.clear();
             Cookies.remove('token');
             navigate("/");
+            document.title = 'Hello Admin!';
             Swal.fire({
                 icon: 'success',
                 title: 'Logout Successful',
@@ -116,6 +117,7 @@ const Header = ({handleMenuClick,onViewNotificationDetail}) => {
             localStorage.clear();
             Cookies.remove('token');
             navigate("/");
+            document.title = 'Hello Admin!';
             Swal.fire({
                 icon: 'error',
                 title: 'Logout error, please re-login',
